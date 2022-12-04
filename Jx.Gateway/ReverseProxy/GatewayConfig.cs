@@ -36,4 +36,12 @@ public class GatewayConfig : IProxyConfig
     public IReadOnlyList<RouteConfig> Routes { get; }
     public IReadOnlyList<ClusterConfig> Clusters { get; }
     public IChangeToken ChangeToken { get; }
+
+    /// <summary>
+    /// config更新
+    /// </summary>
+    internal void Changed()
+    {
+        _cts.Cancel();
+    }
 }

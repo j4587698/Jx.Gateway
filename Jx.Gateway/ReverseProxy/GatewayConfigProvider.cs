@@ -12,4 +12,12 @@ public class GatewayConfigProvider : IProxyConfigProvider
     }
     
     public IProxyConfig GetConfig() => _config;
+
+    public void Update()
+    {
+        var old = _config;
+        _config = new GatewayConfig();
+        old.Changed();
+    }
+    
 }
