@@ -1,0 +1,51 @@
+﻿@page "/gateway"
+@using Jx.Gateway.Entity
+@using Jx.Gateway.ReverseProxy
+@using Jx.Gateway.Utils
+@using Microsoft.AspNetCore.Components
+@using Yarp.ReverseProxy.Configuration
+@inject IProxyConfigProvider IConfigProvider
+
+<Table TItem="GatewayEntity" ShowToolbar="true" ShowExtendButtons="true" IsBordered="true" IsStriped="true" ShowDefaultButtons="true" 
+       IsPagination="true" PageItemsSource="new []{10, 20, 50}" IsHideFooterWhenNoData="true" EditDialogRowType="RowType.Normal" OnAddAsync="OnAddAsync"
+       OnQueryAsync="OnQueryAsync" OnSaveAsync="OnSaveAsync">
+    <TableColumns>
+        <TableColumn @bind-Field="@context.Name"></TableColumn>
+        <TableColumn @bind-Field="@context.Url"></TableColumn>
+        <TableColumn @bind-Field="@context.Hosts">
+            <EditTemplate Context="value">
+                <ListArea  @bind-Value="@value.Hosts" ShowLabel="true" DisplayText="请输入要添加的域名，每行一个"></ListArea>
+            </EditTemplate>
+        </TableColumn>
+    </TableColumns>
+</Table>
+
+@code {
+
+    private Task<QueryData<GatewayEntity>> OnQueryAsync(QueryPageOptions arg)
+    {
+        var data = new QueryData<GatewayEntity>();
+        data.Items = LitedbHelper.GetGatewayCollection().FindAll();
+        data.TotalCount = data.Items.Count();
+        return Task.FromResult(data);
+    }
+
+    private Task<bool> OnSaveAsync(GatewayEntity arg1, ItemChangedType arg2)
+    {
+        LitedbHelper.GetGatewayCollection().Upsert(arg1);
+        (IConfigProvider as GatewayConfigProvider)?.Update();
+        return Task.FromResult(true);
+    }
+
+    private Task<GatewayEntity> OnAddAsync()
+    {
+        var gateway = new GatewayEntity
+        {
+            ClusterId = Guid.NewGuid().ToString(),
+            RouteId = Guid.NewGuid().ToString(),
+            Hosts = new List<string>()
+        };
+        return Task.FromResult(gateway);
+    }
+
+}

@@ -1,4 +1,5 @@
-﻿using Microsoft.Extensions.Primitives;
+﻿using Jx.Gateway.Utils;
+using Microsoft.Extensions.Primitives;
 using Yarp.ReverseProxy.Configuration;
 
 namespace Jx.Gateway.ReverseProxy;
@@ -9,27 +10,9 @@ public class GatewayConfig : IProxyConfig
     
     public GatewayConfig()
     {
-        Clusters = new[]
-        {
-            new ClusterConfig()
-            {
-                ClusterId = "bb",
-                Destinations = new Dictionary<string, DestinationConfig>()
-                {
-                    {"baidu", new DestinationConfig() {Address = "https://www.blazor.zone"}}
-                }
-            }
-        };
-        Routes = new []{new RouteConfig()
-        {
-            RouteId = "bb",
-            ClusterId = "bb",
-            // Order = -200,
-            Match = new RouteMatch()
-            {
-                Path = "{**catch-all}"
-            }
-        }};
+        var gatewayEntities = LitedbHelper.GetGatewayCollection().FindAll().ToList();
+        Clusters = gatewayEntities.Select(x => x.ToCluster()).ToArray();
+        Routes = gatewayEntities.Select(x => x.ToRoute()).ToArray();
         ChangeToken = new CancellationChangeToken(_cts.Token);
     }
     

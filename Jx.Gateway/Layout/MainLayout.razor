@@ -1,3 +1,52 @@
 ﻿@inherits LayoutComponentBase
 
-<main> @Body </main>
+<CascadingValue Value="this" IsFixed="true">
+    <Layout SideWidth="0" IsPage="true" IsFullSide="true" IsFixedHeader="true" IsFixedFooter="true"
+            ShowFooter="true" ShowGotoTop="true" ShowCollapseBar="true" Menus="@Menus" AdditionalAssemblies="new[] { GetType().Assembly }">
+        <Header>
+            <span class="ms-3 flex-fill">Jx网关</span>
+            <Widget></Widget>
+            <img alt="avatar" src="_content/BootstrapBlazor.Shared/images/Argo.png" class="layout-avatar-right" />
+            <span class="mx-3 d-none d-sm-block">超级管理员</span>
+        </Header>
+        <Side>
+            <div class="layout-banner">
+                <img alt="logo" class="layout-logo" src="_content/BootstrapBlazor.Shared/images/logo.png" />
+                <div class="layout-title">
+                    <span>网关后台</span>
+                </div>
+            </div>
+            <div class="layout-user">
+                <img alt="avatar" class="layout-avatar" src="_content/BootstrapBlazor.Shared/images/Argo-C.png">
+                <div class="layout-title">
+                    <span>管理员</span>
+                </div>
+                <div class="layout-user-state"></div>
+            </div>
+        </Side>
+        <Main>
+            @Body
+        </Main>
+        <Footer>
+            <div class="text-center flex-fill">
+                Jx.Gateway © 2023
+            </div>
+        </Footer>
+    </Layout>
+</CascadingValue>
+
+@code
+{
+    private IEnumerable<MenuItem>? Menus { get; set; }
+
+    protected override void OnInitialized()
+    {
+        base.OnInitialized();
+        Menus = new List<MenuItem>
+        {
+            new MenuItem() { Text = "网关管理", Icon = "fa-fw fa-solid fa-house", Url = "gateway" },
+            new MenuItem() { Text = "后台模拟器", Icon = "fa-fw fa-solid fa-desktop", Url = "layout-page" },
+            new MenuItem() { Text = "示例网页", Icon = "fa-fw fa-solid fa-laptop", Url = "layout-demo/text=Parameter1" }
+        };
+    }
+}
