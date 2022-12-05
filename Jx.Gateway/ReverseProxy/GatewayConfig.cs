@@ -24,7 +24,7 @@ public class GatewayConfig : IProxyConfig
         {
             RouteId = "bb",
             ClusterId = "bb",
-            Order = -200,
+            // Order = -200,
             Match = new RouteMatch()
             {
                 Path = "{**catch-all}"

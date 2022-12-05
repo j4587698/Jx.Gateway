@@ -6,6 +6,7 @@ var builder = WebApplication.CreateBuilder(args);
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddReverseProxy().LoadGateway();
+builder.Services.AddBootstrapBlazor();
 
 var app = builder.Build();
 
