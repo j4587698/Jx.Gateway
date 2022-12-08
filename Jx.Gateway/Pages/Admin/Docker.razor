@@ -5,6 +5,7 @@
 
 
 <Table TItem="ContainerListResponse" Items="items" ShowToolbar="true" ShowExtendButtons="true" IsBordered="true" IsStriped="true" ShowDefaultButtons="false" 
+    ShowEditButtonCallback="e => false" ShowDeleteButtonCallback="e => false"
        IsPagination="true" PageItemsSource="new []{10, 20, 50}" >
     <TableColumns>
         <TableColumn @bind-Field="@context.Names" Text="容器名">
@@ -12,7 +13,16 @@
                 @string.Join(",", value.Value)
             </Template>
         </TableColumn>
+        <TableColumn @bind-Field="@context.State" Text="状态" LookupServiceKey="docker.state"></TableColumn>
+        <TableColumn @bind-Field="@context.Image" Text="镜像"></TableColumn>
+        <TableColumn @bind-Field="@context.Created" Text="创建时间" FormatString="yyyy-MM-dd HH:mm:ss"></TableColumn>
     </TableColumns>
+    <RowButtonTemplate>
+        <TableCellButton Color="Color.None" Icon="fa-solid fa-file-lines" TooltipText="日志"></TableCellButton>
+        <TableCellButton Color="Color.None" Icon="fa-solid fa-circle-info" TooltipText="详情"></TableCellButton>
+        <TableCellButton Color="Color.None" Icon="fa-solid fa-chart-area" TooltipText="状态"></TableCellButton>
+        <TableCellButton Color="Color.None" Icon="fa-solid fa-terminal" TooltipText="终端"></TableCellButton>
+    </RowButtonTemplate>
 </Table>
 
 @code {

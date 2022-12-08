@@ -1,5 +1,7 @@
+using BootstrapBlazor.Components;
 using Jx.Gateway.Docker;
 using Jx.Gateway.ReverseProxy;
+using Jx.Gateway.Services;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
 
@@ -9,6 +11,7 @@ builder.Services.AddServerSideBlazor();
 builder.Services.AddReverseProxy().LoadGateway();
 builder.Services.AddBootstrapBlazor();
 builder.Services.AddDocker();
+builder.Services.AddSingleton<ILookupService, LookupService>();
 var app = builder.Build();
 
 app.UseStaticFiles();
