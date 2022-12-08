@@ -1,0 +1,30 @@
+﻿@page "/docker"
+@using global::Docker.DotNet
+@using global::Docker.DotNet.Models
+@inject DockerClient dockerClient
+
+
+<Table TItem="ContainerListResponse" Items="items" ShowToolbar="true" ShowExtendButtons="true" IsBordered="true" IsStriped="true" ShowDefaultButtons="false" 
+       IsPagination="true" PageItemsSource="new []{10, 20, 50}" >
+    <TableColumns>
+        <TableColumn @bind-Field="@context.Names" Text="容器名">
+            <Template Context="value">
+                @string.Join(",", value.Value)
+            </Template>
+        </TableColumn>
+    </TableColumns>
+</Table>
+
+@code {
+    private IList<ContainerListResponse>? items;
+    
+    protected override async Task OnInitializedAsync()
+    {
+        items = await dockerClient.Containers.ListContainersAsync(new ContainersListParameters()
+        {
+            All = true
+        });
+        
+    }
+
+}

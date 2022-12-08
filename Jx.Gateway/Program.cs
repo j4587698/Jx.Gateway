@@ -1,3 +1,4 @@
+using Jx.Gateway.Docker;
 using Jx.Gateway.ReverseProxy;
 using Microsoft.AspNetCore.Components;
 using Microsoft.AspNetCore.Components.Web;
@@ -7,7 +8,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddReverseProxy().LoadGateway();
 builder.Services.AddBootstrapBlazor();
-
+builder.Services.AddDocker();
 var app = builder.Build();
 
 app.UseStaticFiles();
