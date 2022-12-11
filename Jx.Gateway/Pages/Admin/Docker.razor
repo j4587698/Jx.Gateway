@@ -3,6 +3,7 @@
 @using global::Docker.DotNet.Models
 @using Constants = Jx.Gateway.Utils.Constants
 @using System.Diagnostics.CodeAnalysis
+@using Jx.Gateway.Enums
 @inject DockerClient dockerClient
 
 <PageTitle>Docker管理</PageTitle>
@@ -37,7 +38,9 @@
         </TableColumn>
     </TableColumns>
     <TableToolbarTemplate>
-        <TableToolbarButton Text="启动容器" IsDisabled="@(SelectedRows.Count != 1 || SelectedRows[0].State == "stoped")"></TableToolbarButton>
+        <TableToolbarButton Icon="fas fa-play" Text="启动容器" IsDisabled="@(SelectedRows.Count != 1 || SelectedRows[0].State == DockerState.running.ToString())"></TableToolbarButton>
+        <TableToolbarButton Icon="fas fa-stop" Text="停止容器" IsDisabled="@(SelectedRows.Count != 1 || SelectedRows[0].State != DockerState.running.ToString())"></TableToolbarButton>
+        <TableToolbarButton Icon="fas fa-pause" Text="暂停容器" IsDisabled="@(SelectedRows.Count != 1 || SelectedRows[0].State != DockerState.running.ToString())"></TableToolbarButton>
     </TableToolbarTemplate>
     <RowButtonTemplate>
         <TableCellButton Color="Color.None" Icon="fa-solid fa-file-lines" TooltipText="日志"></TableCellButton>
@@ -49,8 +52,8 @@
 
 @code {
     private IList<ContainerListResponse>? items;
-    
-    private List<ContainerListResponse> SelectedRows = new List<ContainerListResponse>();
+
+    private List<ContainerListResponse> SelectedRows { get; set; } = new List<ContainerListResponse>();
 
     protected override async Task OnInitializedAsync()
     {
