@@ -1,22 +1,44 @@
 ﻿@page "/docker"
 @using global::Docker.DotNet
 @using global::Docker.DotNet.Models
+@using Constants = Jx.Gateway.Utils.Constants
+@using System.Diagnostics.CodeAnalysis
 @inject DockerClient dockerClient
 
+<PageTitle>Docker管理</PageTitle>
 
 <Table TItem="ContainerListResponse" Items="items" ShowToolbar="true" ShowExtendButtons="true" IsBordered="true" IsStriped="true" ShowDefaultButtons="false" 
-    ShowEditButtonCallback="e => false" ShowDeleteButtonCallback="e => false"
-       IsPagination="true" PageItemsSource="new []{10, 20, 50}" >
+       @bind-SelectedRows="SelectedRows"
+       IsMultipleSelect="true" IsPagination="true" PageItemsSource="new []{10, 20, 50}" 
+       ShowEditButtonCallback="e => false" ShowDeleteButtonCallback="e => false">
     <TableColumns>
         <TableColumn @bind-Field="@context.Names" Text="容器名">
             <Template Context="value">
-                @string.Join(",", value.Value)
+                @foreach (string name in value.Value)
+                {
+                    <div>@name.Trim('/')</div>
+                }
             </Template>
         </TableColumn>
-        <TableColumn @bind-Field="@context.State" Text="状态" LookupServiceKey="docker.state"></TableColumn>
+        <TableColumn @bind-Field="@context.State" Text="状态" Width="80">
+            <Template Context="value">
+                <Tag>@(Constants.GetChineseState(value.Value)?? value.Value)</Tag>
+            </Template>
+        </TableColumn>
         <TableColumn @bind-Field="@context.Image" Text="镜像"></TableColumn>
         <TableColumn @bind-Field="@context.Created" Text="创建时间" FormatString="yyyy-MM-dd HH:mm:ss"></TableColumn>
+        <TableColumn @bind-Field="@context.NetworkSettings" Text="IP地址">
+            <Template Context="value">
+                @foreach(var network in value.Value.Networks.Values)
+                {
+                    <div>@network.IPAddress</div>
+                }
+            </Template>
+        </TableColumn>
     </TableColumns>
+    <TableToolbarTemplate>
+        <TableToolbarButton Text="启动容器" IsDisabled="@(SelectedRows.Count != 1 || SelectedRows[0].State == "stoped")"></TableToolbarButton>
+    </TableToolbarTemplate>
     <RowButtonTemplate>
         <TableCellButton Color="Color.None" Icon="fa-solid fa-file-lines" TooltipText="日志"></TableCellButton>
         <TableCellButton Color="Color.None" Icon="fa-solid fa-circle-info" TooltipText="详情"></TableCellButton>
@@ -28,6 +50,8 @@
 @code {
     private IList<ContainerListResponse>? items;
     
+    private List<ContainerListResponse> SelectedRows = new List<ContainerListResponse>();
+
     protected override async Task OnInitializedAsync()
     {
         items = await dockerClient.Containers.ListContainersAsync(new ContainersListParameters()

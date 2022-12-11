@@ -1,4 +1,6 @@
 ﻿using BootstrapBlazor.Components;
+using Jx.Toolbox.Extensions;
+using Constants = Jx.Gateway.Utils.Constants;
 
 namespace Jx.Gateway.Services
 {
@@ -7,20 +9,13 @@ namespace Jx.Gateway.Services
         public IEnumerable<SelectedItem>? GetItemsByKey(string? key)
         {
             IEnumerable<SelectedItem>? items = null;
-            switch (key)
+            if (key.IsNullOrEmpty())
             {
-                case "docker.state":
-                    items = new List<SelectedItem>()
-                    {
-                        new() { Value = "created", Text = "已创建" },
-                        new() { Value = "restarting", Text = "重启中" },
-                        new() { Value = "running", Text = "运行中" },
-                        new() { Value = "removing", Text = "迁移中" },
-                        new() { Value = "paused", Text = "已暂停" },
-                        new() { Value = "exited", Text = "已停止" },
-                        new() { Value = "dead", Text = "已死亡" },
-                    };
-                    break;
+                return null;
+            }
+            if (Constants.SelectItems.ContainsKey(key))
+            {
+                items = Constants.SelectItems[key];
             }
             return items;
         }
