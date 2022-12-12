@@ -1,11 +1,13 @@
+using System.Security.Cryptography.X509Certificates;
 using BootstrapBlazor.Components;
 using Jx.Gateway.Docker;
 using Jx.Gateway.ReverseProxy;
 using Jx.Gateway.Services;
-using Microsoft.AspNetCore.Components;
-using Microsoft.AspNetCore.Components.Web;
+using Constants = Jx.Gateway.Utils.Constants;
 
 var builder = WebApplication.CreateBuilder(args);
+builder.UseKestrelHttps();
+
 builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddReverseProxy().LoadGateway();
@@ -23,3 +25,4 @@ app.MapBlazorHub();
 app.MapFallbackToPage("/_Host");
 
 app.Run();
+

@@ -17,7 +17,22 @@
                 <ListArea  @bind-Value="@value.Hosts" ShowLabel="true" DisplayText="请输入要添加的域名，每行一个"></ListArea>
             </EditTemplate>
         </TableColumn>
+        <TableColumn @bind-Field="@context.ExpTime">
+            <Template Context="value">
+                @if (value.Value == null)
+                {
+                    @:尚未申请证书
+                }
+                else
+                {
+                    @value.Value.Value.ToString("yyyy-MM-dd HH:mm:ss")
+                }
+            </Template>
+        </TableColumn>
     </TableColumns>
+    <BeforeRowButtonTemplate>
+        <TableCellButton Text="申请证书"></TableCellButton>
+    </BeforeRowButtonTemplate>
 </Table>
 
 @code {

@@ -34,4 +34,7 @@ public class GatewayEntity
     [Required]
     [NotNull]
     public List<string>? Hosts { get; set; }
+
+    [DisplayName("证书过期时间")]
+    public DateTime? ExpTime { get; set; }
 }

@@ -7,6 +7,7 @@
     </PropertyGroup>
 
     <ItemGroup>
+      <PackageReference Include="ACMESharpCore" Version="2.2.0.148" />
       <PackageReference Include="BootstrapBlazor" Version="7.1.0" />
       <PackageReference Include="BootstrapBlazor.FontAwesome" Version="7.0.0" />
       <PackageReference Include="Docker.DotNet" Version="3.125.12" />
