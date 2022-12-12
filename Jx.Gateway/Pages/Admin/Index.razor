@@ -1,4 +1,53 @@
 ﻿@page "/"
+@using Constants = Jx.Gateway.Utils.Constants
 
-<h1>Hello, world!</h1>
-<Button Color="Color.Primary" Icon="fa-solid fa-font-awesome" Text="测试" />
+<GroupBox Title="网关信息">
+    <Row ItemsPerRow="ItemsPerRow.Four">
+        <Card HeaderText="当前网关数量" IsCenter="true">
+            <BodyTemplate>
+                <h1>10</h1>
+            </BodyTemplate>
+        </Card>
+        <Card HeaderText="当前网关数量" IsCenter="true">
+            <BodyTemplate>
+                <h1>10</h1>
+            </BodyTemplate>
+        </Card>
+        <Card HeaderText="当前网关数量" IsCenter="true">
+            <BodyTemplate>
+                <h1>10</h1>
+            </BodyTemplate>
+        </Card>
+        <Card HeaderText="当前网关数量" IsCenter="true">
+            <BodyTemplate>
+                <h1>10</h1>
+            </BodyTemplate>
+        </Card>
+    </Row>
+</GroupBox>
+
+<br/>
+
+<GroupBox Title="Docker信息">
+    @if(Constants.SystemInfo != null)
+    {
+        <Row ItemsPerRow="ItemsPerRow.Four">
+            <Card HeaderText="Cpu数量" IsCenter="true">
+                <BodyTemplate>
+                    <h1>@Constants.SystemInfo.NCPU</h1>
+                </BodyTemplate>
+            </Card>
+            <Card HeaderText="内存总量" IsCenter="true">
+                <BodyTemplate>
+                    <h1>@Constants.SystemInfo.MemTotal</h1>
+                </BodyTemplate>
+            </Card>
+
+        </Row>
+    }
+    else
+    {
+        @:无法连接到Docker服务，请检查Docker服务是否正常运行
+        <Button Text="刷新"></Button>
+    }
+</GroupBox>

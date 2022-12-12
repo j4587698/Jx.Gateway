@@ -1,4 +1,5 @@
 ﻿using BootstrapBlazor.Components;
+using Jx.Gateway.Enums;
 using Jx.Toolbox.Extensions;
 using Constants = Jx.Gateway.Utils.Constants;
 
@@ -13,10 +14,12 @@ namespace Jx.Gateway.Services
             {
                 return null;
             }
-            if (Constants.SelectItems.ContainsKey(key))
+
+            items = key switch
             {
-                items = Constants.SelectItems[key];
-            }
+                "docker.state" => typeof(DockerState).ToSelectList(),
+                _ => items
+            };
             return items;
         }
     }

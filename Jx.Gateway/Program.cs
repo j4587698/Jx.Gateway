@@ -12,7 +12,7 @@ builder.Services.AddRazorPages();
 builder.Services.AddServerSideBlazor();
 builder.Services.AddReverseProxy().LoadGateway();
 builder.Services.AddBootstrapBlazor();
-builder.Services.AddDocker();
+await builder.Services.AddDocker();
 builder.Services.AddSingleton<ILookupService, LookupService>();
 var app = builder.Build();
 
