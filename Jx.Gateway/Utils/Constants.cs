@@ -16,4 +16,8 @@ public static class Constants
     public static readonly Dictionary<string, X509Certificate2> Certificates = new();
     
     public static SystemInfoResponse SystemInfo { get; set; }
+    
+    public const string ValidStatus = "valid";
+    public const string InvalidStatus = "invalid";
+    public const string PendingStatus = "pending";
 }
