@@ -1,10 +1,9 @@
 ﻿@page "/docker"
-@using global::Docker.DotNet
 @using global::Docker.DotNet.Models
 @using Constants = Jx.Gateway.Utils.Constants
-@using System.Diagnostics.CodeAnalysis
 @using Jx.Gateway.Enums
-@inject DockerClient dockerClient
+@using Jx.Gateway.Services
+@inject DockerService DockerService
 
 <PageTitle>Docker管理</PageTitle>
 
@@ -53,15 +52,12 @@
 @code {
     private IList<ContainerListResponse>? items;
 
-    private List<ContainerListResponse> SelectedRows { get; set; } = new List<ContainerListResponse>();
+    private List<ContainerListResponse> SelectedRows { get; set; } = new();
 
     protected override async Task OnInitializedAsync()
     {
-        items = await dockerClient.Containers.ListContainersAsync(new ContainersListParameters()
-        {
-            All = true
-        });
-        
+        items = await DockerService.GetContainers();
+
     }
 
 }

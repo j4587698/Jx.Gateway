@@ -1,5 +1,8 @@
 ﻿@page "/"
 @using Constants = Jx.Gateway.Utils.Constants
+@using Humanizer
+@using Jx.Gateway.Services
+@inject DockerService DockerService
 
 <GroupBox Title="网关信息">
     <Row ItemsPerRow="ItemsPerRow.Four">
@@ -32,14 +35,14 @@
     @if(Constants.SystemInfo != null)
     {
         <Row ItemsPerRow="ItemsPerRow.Four">
-            <Card HeaderText="Cpu数量" IsCenter="true">
+            <Card HeaderText="Cpu核心数" IsCenter="true">
                 <BodyTemplate>
                     <h1>@Constants.SystemInfo.NCPU</h1>
                 </BodyTemplate>
             </Card>
             <Card HeaderText="内存总量" IsCenter="true">
                 <BodyTemplate>
-                    <h1>@Constants.SystemInfo.MemTotal</h1>
+                    <h1>@Constants.SystemInfo.MemTotal.Bytes().ToString()</h1>
                 </BodyTemplate>
             </Card>
 
@@ -48,6 +51,14 @@
     else
     {
         @:无法连接到Docker服务，请检查Docker服务是否正常运行
-        <Button Text="刷新"></Button>
+        <Button Text="刷新" OnClick="Refresh"></Button>
     }
 </GroupBox>
+
+@code
+{
+    private async Task Refresh()
+    {
+        await DockerService.RefreshInfo();
+    }
+}
